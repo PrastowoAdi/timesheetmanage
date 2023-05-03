@@ -5,6 +5,9 @@ module.exports = {
     "./components/**/*.{js,ts,jsx,tsx,mdx}",
     "./app/**/*.{js,ts,jsx,tsx,mdx}",
   ],
+  variants: {
+    outline: ["focus"],
+  },
   theme: {
     extend: {
       backgroundImage: {
@@ -14,5 +17,5 @@ module.exports = {
       },
     },
   },
-  plugins: [require("@tailwindcss/forms"), require("tailwind-scrollbar")],
+  plugins: [require("tailwind-scrollbar")],
 };
