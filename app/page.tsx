@@ -105,7 +105,7 @@ export default function Home() {
           ></path>
         </svg>
       ) : (
-        <div className="w-full lg:w-1/2 h-56 scrollbar-thin scrollbar-thumb-white scrollbar-track-amber-400 overflow-y-scroll px-10">
+        <div className="w-full lg:w-1/2 h-56 scrollbar-thin scrollbar-thumb-gray-100 scrollbar-track-amber-300 overflow-y-scroll px-10">
           {data.map((item: any, idx: any) => (
             <div
               className="lg:flex gap-3 mx-auto border-b-2 border-amber-500 p-1 cursor-pointer"
