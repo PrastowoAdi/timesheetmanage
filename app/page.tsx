@@ -8,6 +8,7 @@ import useGetList from "./hooks/useGetList";
 import useAddDaily from "./hooks/useAddDaily";
 import { ActivityList } from "./types";
 import useEditDaily from "./hooks/useEditDaily";
+import { toast } from "react-toastify";
 
 export default function Home() {
   const mutationAddDaily = useAddDaily();
@@ -29,8 +30,10 @@ export default function Home() {
             {
               onSuccess(data) {
                 if (data) {
-                  //set notif success and middleware listen this event
-                  // console.log(data);
+                  toast(`${data.data.message}`, {
+                    autoClose: 2000,
+                    type: "success",
+                  });
                   refetch();
                   setActiveEdited(false);
                   setActivitySelected({});
@@ -53,8 +56,10 @@ export default function Home() {
             {
               onSuccess(data) {
                 if (data) {
-                  //set notif success and middleware listen this event
-                  // console.log(data);
+                  toast(`${data.data.message}`, {
+                    autoClose: 2000,
+                    type: "success",
+                  });
                   refetch();
                 }
               },
@@ -78,6 +83,7 @@ export default function Home() {
           <span className="text-amber-500">Daily</span> Timesheet Note
         </h1>
       </div>
+
       <InputActivty
         dataRow={activitySelected}
         setFormData={(val: any) => onSubmitDailyActivity(val)}
@@ -106,7 +112,7 @@ export default function Home() {
         </svg>
       ) : (
         <div className="w-full lg:w-1/2 h-56 scrollbar-thin scrollbar-thumb-gray-100 scrollbar-track-amber-300 overflow-y-scroll px-10">
-          {data.map((item: any, idx: any) => (
+          {data.map((item: ActivityList, idx: any) => (
             <div
               className="lg:flex gap-3 mx-auto border-b-2 border-amber-500 p-1 cursor-pointer"
               key={idx}
