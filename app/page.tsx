@@ -124,7 +124,7 @@ export default function Home() {
           {data.map((item: ActivityList, idx: any) => (
             <div
               className={`lg:flex gap-3 mx-auto ${
-                idx === data.length ? "border-none" : "border-b-2"
+                idx + 1 === data.length ? "border-none" : "border-b-2"
               } border-amber-500 p-1 cursor-pointer`}
               key={idx}
             >
