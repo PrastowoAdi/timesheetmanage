@@ -123,7 +123,9 @@ export default function Home() {
         <div className="w-full lg:w-1/2 h-56 scrollbar-thin scrollbar-thumb-amber-400 scrollbar-track-slate-100 overflow-y-scroll px-10">
           {data.map((item: ActivityList, idx: any) => (
             <div
-              className="lg:flex gap-3 mx-auto border-b-2 border-amber-500 p-1 cursor-pointer"
+              className={`lg:flex gap-3 mx-auto ${
+                idx === data.length ? "border-none" : "border-b-2"
+              } border-amber-500 p-1 cursor-pointer`}
               key={idx}
             >
               <div className="flex-1">
