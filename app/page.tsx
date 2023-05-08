@@ -18,9 +18,11 @@ export default function Home() {
 
   const [activitySelected, setActivitySelected] = useState<ActivityList>({});
   const [activeEdited, setActiveEdited] = useState<boolean>(false);
+  const [btnProcessLoading, setBtnProcessLoading] = useState<boolean>(false);
 
   const onSubmitDailyActivity = useCallback(
     (val: any) => {
+      setBtnProcessLoading(true);
       if (activeEdited) {
         try {
           mutationUpdateDaily.mutate(
@@ -37,14 +39,17 @@ export default function Home() {
                   refetch();
                   setActiveEdited(false);
                   setActivitySelected({});
+                  setBtnProcessLoading(false);
                 }
               },
               onError(err) {
+                setBtnProcessLoading(false);
                 console.log("err>>response>>submit", err);
               },
             }
           );
         } catch (error) {
+          setBtnProcessLoading(false);
           console.log(error);
         }
       } else {
@@ -61,14 +66,17 @@ export default function Home() {
                     type: "success",
                   });
                   refetch();
+                  setBtnProcessLoading(false);
                 }
               },
               onError(err) {
+                setBtnProcessLoading(false);
                 console.log("err>>response>>submit", err);
               },
             }
           );
         } catch (error) {
+          setBtnProcessLoading(false);
           console.log(error);
         }
       }
@@ -88,6 +96,7 @@ export default function Home() {
         dataRow={activitySelected}
         setFormData={(val: any) => onSubmitDailyActivity(val)}
         activeEdit={activeEdited}
+        btnProcessLoading={btnProcessLoading}
       />
       {isFetching ? (
         <svg
@@ -111,7 +120,7 @@ export default function Home() {
           ></path>
         </svg>
       ) : (
-        <div className="w-full lg:w-1/2 h-56 scrollbar-thin scrollbar-thumb-gray-100 scrollbar-track-amber-300 overflow-y-scroll px-10">
+        <div className="w-full lg:w-1/2 h-56 scrollbar-thin scrollbar-thumb-amber-400 scrollbar-track-slate-100 overflow-y-scroll px-10">
           {data.map((item: ActivityList, idx: any) => (
             <div
               className="lg:flex gap-3 mx-auto border-b-2 border-amber-500 p-1 cursor-pointer"
@@ -170,8 +179,6 @@ export default function Home() {
           ))}
         </div>
       )}
-      {/* <div className="bg-slate-400">
-      </div> */}
     </main>
   );
 }
