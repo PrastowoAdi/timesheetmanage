@@ -52,7 +52,7 @@ const InputActivty = (props: IProps) => {
 
   useEffect(() => {
     if (activeEdit) {
-      setValue("daily_field", `${dataRow.activity}`);
+      setValue("daily_field", `${dataRow.activity}.${dataRow.work}`);
     } else {
       setValue("daily_field", "");
     }

@@ -25,9 +25,17 @@ export default function Home() {
       setBtnProcessLoading(true);
       if (activeEdited) {
         try {
+          const dailyField = val.daily_field;
+          const splitField = dailyField.split(".");
+
+          const payload = {
+            id: val.id,
+            activity: splitField[0],
+            work: splitField[1],
+          };
           mutationUpdateDaily.mutate(
             {
-              ...val,
+              ...payload,
             },
             {
               onSuccess(data) {
@@ -85,7 +93,7 @@ export default function Home() {
   );
 
   return (
-    <main className="flex min-h-screen flex-col items-center p-5 md:p-24">
+    <main className="flex min-h-screen flex-col items-center p-5 md:p-24 pt-10">
       <div className="py-2 border-b-2">
         <h1 className="font-bold text-2xl">
           <span className="text-amber-500">Daily</span> Timesheet Note
@@ -120,7 +128,7 @@ export default function Home() {
           ></path>
         </svg>
       ) : (
-        <div className="w-full lg:w-1/2 h-56 scrollbar-thin scrollbar-thumb-amber-400 scrollbar-track-slate-100 overflow-y-scroll px-10">
+        <div className="w-full lg:w-1/2 h-72 md:h-56 scrollbar-thin scrollbar-thumb-amber-400 scrollbar-track-slate-100 overflow-y-scroll px-10">
           {data.map((item: ActivityList, idx: any) => (
             <div
               className={`lg:flex gap-3 mx-auto ${
@@ -133,6 +141,8 @@ export default function Home() {
                   <p className="text-sm mr-1">{idx + 1 + "."}</p>
                   <p className="text-sm">
                     {item.activity}
+                    {" - "}
+                    <span className="font-semibold">{`(${item.work})`}</span>
                     <span className="block text-xs text-gray-500 mt-1">
                       {moment(item.createdAt).format("DD-MM-YYYY HH:MM:SS")}
                     </span>
@@ -148,14 +158,16 @@ export default function Home() {
                   >
                     <svg
                       xmlns="http://www.w3.org/2000/svg"
+                      fill="none"
                       viewBox="0 0 24 24"
-                      fill="currentColor"
+                      strokeWidth={1.5}
+                      stroke="currentColor"
                       className="w-5 h-5 hover:text-amber-500 transition duration-150"
                     >
                       <path
-                        fillRule="evenodd"
-                        d="M12 2.25c-5.385 0-9.75 4.365-9.75 9.75s4.365 9.75 9.75 9.75 9.75-4.365 9.75-9.75S17.385 2.25 12 2.25zM12.75 9a.75.75 0 00-1.5 0v2.25H9a.75.75 0 000 1.5h2.25V15a.75.75 0 001.5 0v-2.25H15a.75.75 0 000-1.5h-2.25V9z"
-                        clipRule="evenodd"
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        d="M16.023 9.348h4.992v-.001M2.985 19.644v-4.992m0 0h4.992m-4.993 0l3.181 3.183a8.25 8.25 0 0013.803-3.7M4.031 9.865a8.25 8.25 0 0113.803-3.7l3.181 3.182m0-4.991v4.99"
                       />
                     </svg>
                   </p>
@@ -169,7 +181,11 @@ export default function Home() {
                       xmlns="http://www.w3.org/2000/svg"
                       viewBox="0 0 24 24"
                       fill="currentColor"
-                      className="w-5 h-5 hover:text-amber-500 transition duration-150"
+                      className={`w-5 h-5 ${
+                        activitySelected._id === item._id
+                          ? "text-amber-400"
+                          : ""
+                      } hover:text-amber-500 transition duration-150`}
                     >
                       <path d="M21.731 2.269a2.625 2.625 0 00-3.712 0l-1.157 1.157 3.712 3.712 1.157-1.157a2.625 2.625 0 000-3.712zM19.513 8.199l-3.712-3.712-8.4 8.4a5.25 5.25 0 00-1.32 2.214l-.8 2.685a.75.75 0 00.933.933l2.685-.8a5.25 5.25 0 002.214-1.32l8.4-8.4z" />
                       <path d="M5.25 5.25a3 3 0 00-3 3v10.5a3 3 0 003 3h10.5a3 3 0 003-3V13.5a.75.75 0 00-1.5 0v5.25a1.5 1.5 0 01-1.5 1.5H5.25a1.5 1.5 0 01-1.5-1.5V8.25a1.5 1.5 0 011.5-1.5h5.25a.75.75 0 000-1.5H5.25z" />

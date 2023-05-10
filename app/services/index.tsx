@@ -12,8 +12,5 @@ export const addDaily = async (params: any) => {
 };
 
 export const updateDaily = async (params: any) => {
-  const payload = {
-    activity: params.daily_field,
-  };
-  return await utils.HttpClient.put(`/api/daily/${params.id}`, payload);
+  return await utils.HttpClient.put(`/api/daily/${params.id}`, params);
 };
