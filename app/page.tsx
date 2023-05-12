@@ -23,16 +23,16 @@ export default function Home() {
   const onSubmitDailyActivity = useCallback(
     (val: any) => {
       setBtnProcessLoading(true);
+      const dailyField = val.daily_field;
+      const splitField = dailyField.split(".");
+
+      const payload = {
+        id: val.id,
+        activity: splitField[0],
+        work: splitField[1],
+      };
       if (activeEdited) {
         try {
-          const dailyField = val.daily_field;
-          const splitField = dailyField.split(".");
-
-          const payload = {
-            id: val.id,
-            activity: splitField[0],
-            work: splitField[1],
-          };
           mutationUpdateDaily.mutate(
             {
               ...payload,
@@ -64,7 +64,7 @@ export default function Home() {
         try {
           mutationAddDaily.mutate(
             {
-              ...val,
+              ...payload,
             },
             {
               onSuccess(data) {
@@ -153,6 +153,7 @@ export default function Home() {
                 <div className="flex gap-1">
                   <p
                     onClick={() => {
+                      setActivitySelected({});
                       setActiveEdited(false);
                     }}
                   >

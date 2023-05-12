@@ -5,10 +5,7 @@ export const getList = async (params: any) => {
 };
 
 export const addDaily = async (params: any) => {
-  const payload = {
-    activity: params.daily_field,
-  };
-  return await utils.HttpClient.post(`/api/daily`, payload);
+  return await utils.HttpClient.post(`/api/daily`, params);
 };
 
 export const updateDaily = async (params: any) => {
