@@ -1,6 +1,8 @@
 "use client";
 
 import { useCallback, useState } from "react";
+import { toast } from "react-toastify";
+import jsPDF from "jspdf";
 import moment from "moment";
 
 import InputActivty from "./components/InputActivity";
@@ -8,7 +10,6 @@ import useGetList from "./hooks/useGetList";
 import useAddDaily from "./hooks/useAddDaily";
 import { ActivityList } from "./types";
 import useEditDaily from "./hooks/useEditDaily";
-import { toast } from "react-toastify";
 
 export default function Home() {
   const mutationAddDaily = useAddDaily();
@@ -19,6 +20,16 @@ export default function Home() {
   const [activitySelected, setActivitySelected] = useState<ActivityList>({});
   const [activeEdited, setActiveEdited] = useState<boolean>(false);
   const [btnProcessLoading, setBtnProcessLoading] = useState<boolean>(false);
+
+  const downloadPdf = () => {
+    const doc = new jsPDF();
+    let text = data.map((e: any) => e.activity + " - " + e.work + "\n");
+    let textString = text.toString();
+    let replaceComma = textString.replaceAll(",", "");
+    doc.setFontSize(12);
+    doc.text(replaceComma, 10, 20);
+    doc.save("timesheet.pdf");
+  };
 
   const onSubmitDailyActivity = useCallback(
     (val: any) => {
@@ -93,13 +104,16 @@ export default function Home() {
   );
 
   return (
-    <main className="flex min-h-screen flex-col items-center p-5 md:p-24 pt-10">
+    <main className="flex flex-col items-center min-h-screen p-5 pt-10 md:p-24">
       <div className="py-2 border-b-2">
-        <h1 className="font-bold text-2xl">
+        <h1 className="text-2xl font-bold">
           <span className="text-amber-500">Daily</span> Timesheet Note
         </h1>
       </div>
 
+      <button type="button" onClick={downloadPdf}>
+        Download PDF
+      </button>
       <InputActivty
         dataRow={activitySelected}
         setFormData={(val: any) => onSubmitDailyActivity(val)}
@@ -108,7 +122,7 @@ export default function Home() {
       />
       {isFetching ? (
         <svg
-          className="animate-spin mt-5 h-8 w-8 text-white"
+          className="w-8 h-8 mt-5 text-white animate-spin"
           xmlns="http://www.w3.org/2000/svg"
           fill="none"
           viewBox="0 0 24 24"
@@ -128,7 +142,7 @@ export default function Home() {
           ></path>
         </svg>
       ) : (
-        <div className="w-full lg:w-1/2 h-72 md:h-56 scrollbar-thin scrollbar-thumb-amber-400 scrollbar-track-slate-100 overflow-y-scroll px-10">
+        <div className="w-full px-10 overflow-y-scroll lg:w-1/2 h-72 md:h-56 scrollbar-thin scrollbar-thumb-amber-400 scrollbar-track-slate-100">
           {data.map((item: ActivityList, idx: any) => (
             <div
               className={`lg:flex gap-3 mx-auto ${
@@ -138,18 +152,18 @@ export default function Home() {
             >
               <div className="flex-1">
                 <div className="flex">
-                  <p className="text-sm mr-1">{idx + 1 + "."}</p>
+                  <p className="mr-1 text-sm">{idx + 1 + "."}</p>
                   <p className="text-sm">
                     {item.activity}
                     {" - "}
                     <span className="font-semibold">{`(${item.work})`}</span>
-                    <span className="block text-xs text-gray-500 mt-1">
+                    <span className="block mt-1 text-xs text-gray-500">
                       {moment(item.createdAt).format("DD-MM-YYYY HH:MM:SS")}
                     </span>
                   </p>
                 </div>
               </div>
-              <div className="flex-none justify-center my-auto p-3 lg:p-0">
+              <div className="justify-center flex-none p-3 my-auto lg:p-0">
                 <div className="flex gap-1">
                   <p
                     onClick={() => {
@@ -163,7 +177,7 @@ export default function Home() {
                       viewBox="0 0 24 24"
                       strokeWidth={1.5}
                       stroke="currentColor"
-                      className="w-5 h-5 hover:text-amber-500 transition duration-150"
+                      className="w-5 h-5 transition duration-150 hover:text-amber-500"
                     >
                       <path
                         strokeLinecap="round"
