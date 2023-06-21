@@ -23,11 +23,22 @@ export default function Home() {
 
   const downloadPdf = () => {
     const doc = new jsPDF();
-    let text = data.map((e: any) => e.activity + " - " + e.work + "\n");
+    let text = data.map(
+      (e: ActivityList, idx: number) =>
+        idx +
+        1 +
+        ". " +
+        e.activity +
+        " - " +
+        e.work +
+        " - " +
+        moment(e.date).format("DD-MM-YYYY") +
+        "\n"
+    );
     let textString = text.toString();
     let replaceComma = textString.replaceAll(",", "");
     doc.setFontSize(12);
-    doc.text(replaceComma, 10, 20);
+    doc.text(replaceComma, 10, 20, { maxWidth: 170 });
     doc.save("timesheet.pdf");
   };
 
@@ -41,6 +52,7 @@ export default function Home() {
         id: val.id,
         activity: splitField[0],
         work: splitField[1],
+        date: splitField[2],
       };
       if (activeEdited) {
         try {
@@ -158,7 +170,7 @@ export default function Home() {
                     {" - "}
                     <span className="font-semibold">{`(${item.work})`}</span>
                     <span className="block mt-1 text-xs text-gray-500">
-                      {moment(item.createdAt).format("DD-MM-YYYY HH:MM:SS")}
+                      {moment(item.date).format("DD-MM-YYYY HH:MM:SS")}
                     </span>
                   </p>
                 </div>

@@ -3,6 +3,7 @@ import { Controller, useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
 import { ActivityList } from "@/app/types";
+import moment from "moment";
 
 const schema = yup.object().shape({
   daily_field: yup.string().required(),
@@ -52,7 +53,12 @@ const InputActivty = (props: IProps) => {
 
   useEffect(() => {
     if (activeEdit) {
-      setValue("daily_field", `${dataRow.activity}.${dataRow.work}`);
+      setValue(
+        "daily_field",
+        `${dataRow.activity}.${dataRow.work}.${moment(dataRow.date).format(
+          "YYYY-MM-DD"
+        )}`
+      );
     } else {
       setValue("daily_field", "");
     }
@@ -73,11 +79,11 @@ const InputActivty = (props: IProps) => {
         noValidate
         autoComplete="off"
         onSubmit={handleSubmit(onSubmit)}
-        className="flex flex-col p-10 gap-3"
+        className="flex flex-col gap-3 p-10"
       >
         {activeEdit ? (
           <textarea
-            className="rounded border border-amber-500 text-sm focus:outline-none p-2"
+            className="p-2 text-sm border rounded border-amber-500 focus:outline-none"
             {...register("daily_field")}
           />
         ) : (
@@ -88,7 +94,7 @@ const InputActivty = (props: IProps) => {
             render={({ field: { value, onChange, onBlur } }) => (
               <>
                 <textarea
-                  className="rounded border border-gray-400 text-sm focus:outline-amber-500 p-2"
+                  className="p-2 text-sm border border-gray-400 rounded focus:outline-amber-500"
                   value={value}
                   onBlur={onBlur}
                   onChange={onChange}
@@ -106,7 +112,7 @@ const InputActivty = (props: IProps) => {
 
         {btnProcessLoading ? (
           <svg
-            className="animate-spin mt-5 h-8 w-8 text-white"
+            className="w-8 h-8 mt-5 text-white animate-spin"
             xmlns="http://www.w3.org/2000/svg"
             fill="none"
             viewBox="0 0 24 24"
@@ -128,7 +134,7 @@ const InputActivty = (props: IProps) => {
         ) : (
           <button
             type="submit"
-            className="bg-transparent hover:bg-amber-500 text-amber-500 font-semibold hover:text-white py-2 px-4 border border-amber-500 hover:border-transparent rounded transition duration-150 ease-out w-32"
+            className="w-32 px-4 py-2 font-semibold transition duration-150 ease-out bg-transparent border rounded hover:bg-amber-500 text-amber-500 hover:text-white border-amber-500 hover:border-transparent"
           >
             Submit
           </button>
