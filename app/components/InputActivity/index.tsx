@@ -10,6 +10,7 @@ const schema = yup.object().shape({
 });
 
 interface FormData {
+  username?: string;
   daily_field: string;
 }
 
@@ -48,7 +49,7 @@ const InputActivty = (props: IProps) => {
       };
       setFormData(payload);
     },
-    [dataRow]
+    [dataRow, setFormData]
   );
 
   useEffect(() => {

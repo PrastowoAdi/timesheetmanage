@@ -1,6 +1,6 @@
 "use client";
 
-import { useCallback, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { toast } from "react-toastify";
 import jsPDF from "jspdf";
 import moment from "moment";
@@ -10,12 +10,24 @@ import useGetList from "./hooks/useGetList";
 import useAddDaily from "./hooks/useAddDaily";
 import { ActivityList } from "./types";
 import useEditDaily from "./hooks/useEditDaily";
+import { useRouter } from "next/navigation";
 
 export default function Home() {
+  const [localForm, setLocalForm] = useState<string>("");
+  const router = useRouter();
   const mutationAddDaily = useAddDaily();
   const mutationUpdateDaily = useEditDaily();
 
-  const { data, isFetching, refetch } = useGetList();
+  useEffect(() => {
+    const getLocalForm = localStorage.getItem("username");
+    if (getLocalForm !== null) {
+      setLocalForm(JSON.parse(getLocalForm!));
+    } else {
+      router.replace("/input-username");
+    }
+  }, [router]);
+
+  const { data, isFetching, refetch, isLoading } = useGetList();
 
   const [activitySelected, setActivitySelected] = useState<ActivityList>({});
   const [activeEdited, setActiveEdited] = useState<boolean>(false);
@@ -50,10 +62,12 @@ export default function Home() {
 
       const payload = {
         id: val.id,
+        username: localForm,
         activity: splitField[0],
         work: splitField[1],
         date: splitField[2],
       };
+
       if (activeEdited) {
         try {
           mutationUpdateDaily.mutate(
@@ -112,7 +126,7 @@ export default function Home() {
         }
       }
     },
-    [mutationAddDaily, activeEdited, refetch]
+    [mutationAddDaily, activeEdited, refetch, mutationUpdateDaily, localForm]
   );
 
   return (
@@ -123,9 +137,12 @@ export default function Home() {
         </h1>
       </div>
 
-      <button type="button" onClick={downloadPdf}>
-        Download PDF
-      </button>
+      {isLoading ? null : (
+        <button type="button" onClick={downloadPdf}>
+          Download PDF
+        </button>
+      )}
+
       <InputActivty
         dataRow={activitySelected}
         setFormData={(val: any) => onSubmitDailyActivity(val)}
