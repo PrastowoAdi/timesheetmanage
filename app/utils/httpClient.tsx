@@ -1,5 +1,6 @@
 import axios from "axios";
-const BASE_URL = "https://wild-cyan-dolphin-suit.cyclic.app/";
+const BASE_URL = "https://api.prastowonugroho.my.id/";
+// const BASE_URL = "https://wild-cyan-dolphin-suit.cyclic.app/";
 // const BASE_URL = "http://localhost:8800/";
 
 export const HttpClient = axios.create({
